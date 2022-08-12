@@ -16,6 +16,9 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ExpenseListComponent } from './expense/expense-list/expense-list.component';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { AppRoutingModule } from './app-routing.module';
+import {MatTableModule} from '@angular/material/table';
+import { AnalyticsComponent } from './analytics/analytics.component';
 
 
 @NgModule({
@@ -33,14 +36,17 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatFormFieldModule,
     ReactiveFormsModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    AppRoutingModule,
+    MatTableModule
     ],
 
  declarations: [
     AppComponent,
     HeaderComponent,
     ExpenseCreateComponent,
-    ExpenseListComponent
+    ExpenseListComponent,
+    AnalyticsComponent
   ],
 
 
