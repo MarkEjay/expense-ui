@@ -19,6 +19,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { AppRoutingModule } from './app-routing.module';
 import {MatTableModule} from '@angular/material/table';
 import { AnalyticsComponent } from './analytics/analytics.component';
+import { MatSortModule } from '@angular/material/sort';
 
 
 @NgModule({
@@ -38,7 +39,8 @@ import { AnalyticsComponent } from './analytics/analytics.component';
     MatDatepickerModule,
     MatNativeDateModule,
     AppRoutingModule,
-    MatTableModule
+    MatTableModule,
+    MatSortModule
     ],
 
  declarations: [

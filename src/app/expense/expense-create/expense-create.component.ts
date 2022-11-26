@@ -2,6 +2,9 @@ import { Component, OnInit,Inject } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ExpenseService } from '../expense.service';
 import { Expense } from '../expense';
+import {MatDialog, MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import { of } from 'rxjs';
+import {ExpenseListComponent} from '../expense-list/expense-list.component'
 
 
 @Component({
@@ -17,13 +20,27 @@ export class ExpenseCreateComponent implements OnInit {
   purchaseDate= new FormControl();
 
   //selectedExpense: Expense;
-
-  constructor(private expenseService: ExpenseService) { }
+actionBtn:string="Save"
+  constructor(private expenseService: ExpenseService,
+    @Inject(MAT_DIALOG_DATA) public editExpense:any,
+    private dialogRef : MatDialogRef<ExpenseCreateComponent>) { }
 
   ngOnInit(): void {
+    console.log(this.editExpense)
+    console.log("hi")
+    console.log(this.editExpense._id)
+    if(this.editExpense){
+      this.actionBtn="Update";
+      this.title.setValue(this.editExpense.title);
+      this.price.setValue(this.editExpense.price);
+      this.category.setValue(this.editExpense.category);
+      this.description.setValue(this.editExpense.description);
+      this.purchaseDate.setValue(this.editExpense.purchaseDate);
+    }
   }
 
-  addExpense(){
+
+  updateExpense(){
     let ex={
       title: this.title.value,
       price: this.price.value,
@@ -32,9 +49,36 @@ export class ExpenseCreateComponent implements OnInit {
       purchaseDate: this.purchaseDate.value
 
     }
-    this.expenseService.addExpense(ex).subscribe(response=>{
-      console.log(response)
-    })
+   this.expenseService.updateExpense(ex, this.editExpense._id)
+   .subscribe(
+     response=>{
+      this.dialogRef.close()
+       console.log(response);
+     }
+   )
   }
+
+  addExpense(){
+    if(!this.editExpense){
+      let ex={
+        title: this.title.value,
+        price: this.price.value,
+        category: this.category.value,
+        description: this.description.value,
+        purchaseDate: this.purchaseDate.value
+
+      }
+      this.expenseService.addExpense(ex).subscribe(response=>{
+        window.location.reload()
+      //  this.expenseService.getAllexpense()
+      })
+    }
+    else{
+      this.updateExpense()
+    }
+
+  }
+
+
 
 }

@@ -1,5 +1,12 @@
-#chart {
+#myChart {
   display: block;
   width: 400px;
   height: 400px;
+}
+.example-month-picker .mat-calendar-period-button {
+  pointer-events: none;
+}
+
+.example-month-picker .mat-calendar-arrow {
+  display: none;
 }

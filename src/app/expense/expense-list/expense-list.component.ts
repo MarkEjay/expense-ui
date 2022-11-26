@@ -1,8 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ViewChild } from '@angular/core';
 import { ExpenseService } from '../expense.service';
 import {Expense} from '../expense'
 import { Observable, of } from 'rxjs';
 import { MatTableDataSource } from '@angular/material/table';
+import {MatSort, SortDirection,Sort} from '@angular/material/sort';
+import { ExpenseCreateComponent } from '../expense-create/expense-create.component';
+import {MatDialog} from '@angular/material/dialog';
+
 
 // export interface ExpenseItems {
 //   title? : any;
@@ -22,33 +26,48 @@ import { MatTableDataSource } from '@angular/material/table';
 export class ExpenseListComponent implements OnInit  {
 
   expense: Expense[]=[];
-  tableheaders: string[] = ['title','price','category','description', 'purchaseDate']
+  position: number = 0;
+  tableheaders: string[] = ['title','price','category','description', 'purchaseDate','action' ]
   // expenses$?: Observable<Expense[]>;
+  dataSource! : MatTableDataSource<any>
   // title? : any;
   // price? : any;
   //
   // dataSource?: MatTableDataSource<Expense>;
 
   constructor(
-    private expenseService: ExpenseService
+    private expenseService: ExpenseService,
+    public dialog: MatDialog
   ) { }
+  @ViewChild(MatSort) sort!: MatSort;
 
   ngOnInit(): void {
+    this.getExpense();
+
+  }
+
+  getExpense(){
     this.expenseService.getAllexpense().subscribe(data => {
       this.expense=data.expense;
-      console.log(this.expense)
-    //   for(var i of data.expense){
-    //  // console.log(i.title)
-    //   // this.title = i.title;
-    //   // this.price = i.price
-    // //  console.log(this.expense.expense[0].title);
-    //   // console.log(this.title)
-    //   // console.log(this.price)
-    //   }
+      this.dataSource= new MatTableDataSource(this.expense)
+      this.dataSource.sort = this.sort;
+
+
     })
   }
 
+  editExpense(element:any){
+    this.dialog.open(ExpenseCreateComponent,{
+      data: element
+    }).afterClosed().subscribe(result =>{
+      this.getExpense()
+    })
+}
 
-  //
-  // dataSource = this.expense;
+deleteExpense(id: string){
+  this.expenseService.deleteExpense(id).subscribe(response=>{
+    this.getExpense()
+    console.log('deleted')
+  })
+}
 }

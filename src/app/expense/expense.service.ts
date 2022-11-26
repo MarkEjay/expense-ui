@@ -22,4 +22,14 @@ export class ExpenseService  {
    getAllexpense():Observable<any>{
      return this.http.get(`${BASEURL}/expense`)
    }
+
+   updateExpense(expense: any, id: string) {
+     return this.http.put(`${BASEURL}/expense/${id}`,expense)
+   }
+
+   deleteExpense(id:string){
+     return this.http.delete(`${BASEURL}/expense/${id}`)
+   }
+
+   
 }
